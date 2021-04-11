@@ -21,16 +21,18 @@ def dowload(url, start, end, quality):
 
 def df_test(url, n, quality, path):
     m_url = YouTube(url).streams.get_by_itag(quality).url
-    process_call_str = 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%05d.png -y'.format(str(m_url), str(n), str(path))
+    process_call_str = 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%07d.png -y'.format(str(m_url), str(n), str(path))
     subprocess.getstatusoutput(process_call_str)
+
 
 def prepared_path(path):
     if not os.path.isdir(path):
         os.mkdir(path)
     else:
-        files = glob.glob('/'+path)
+        files = glob.glob('/' + path)
         for f in files:
             os.remove(f)
+
 
 def df_tests(url, n, low_quality=sd, height_quality=fhd):
     low_path, height_path = 'low_quality', 'height_quality'
@@ -40,6 +42,7 @@ def df_tests(url, n, low_quality=sd, height_quality=fhd):
     th_height = Thread(target=df_test(url, n, height_quality, height_path))
     th_height.start()
     th_low.start()
+
 
 df_tests('https://www.youtube.com/watch?v=ES8yryhGjaQurl', 30)
 
