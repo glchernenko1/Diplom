@@ -37,4 +37,3 @@ def compare(generate_path, origin_path):
 
 
 # print(rmse(r"C:\Users\google\PycharmProjects\Diplom\height_quality\img00001.png", r"C:\Users\google\PycharmProjects\Diplom\height_quality\img00007.png"))
-print(compare('low_quality', 'low_quality'))
