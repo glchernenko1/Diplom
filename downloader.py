@@ -27,7 +27,8 @@ class Downloader(object):
     def df_test(self, n, quality, path):
         m_url = YouTube(self.url).streams.get_by_itag(quality).url
         process_call_str = 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%07d.png -y'.format(str(m_url), str(n), str(path))
-        Thread(target = subprocess.getstatusoutput, args=(process_call_str,)).start()
+        #subprocess.getstatusoutput(process_call_str)
+        Thread(target=subprocess.getstatusoutput, args=(process_call_str,)).start()
 
     def download_df(self, quality, path):
         tmp = str(YouTube(self.url).streams.get_by_itag(quality))
@@ -48,9 +49,10 @@ class Downloader(object):
         low_path, height_path = 'low_quality', 'height_quality'
         self.prepared_path(low_path)
         self.prepared_path(height_path)
-        self.df_test(n, low_quality, low_path)
-
-        Downloader(self.url).df_test(n, height_quality, height_path)
+        tmp1 = Downloader(self.url)
+        tmp2 = Downloader(self.url)
+        tmp1.df_test(n, low_quality, low_path)
+        tmp2.df_test(n, height_quality, height_path)
 
 
 #
@@ -64,5 +66,7 @@ class Downloader(object):
 # t = "00:01:00.01"
 #print(YouTube('https://www.youtube.com/watch?v=vAbN2dIdOvE').streams)
 video = Downloader('https://www.youtube.com/watch?v=vAbN2dIdOvE')
-video.df_test(15, video.p240, 'low_quality')
-Downloader(video.url).df_test(15, video.fhd, 'height_quality')
+#
+video.df_tests(15)
+#video.df_test(15, video.p240, 'height_quality')
+#Downloader(video.url).df_test(15, video.fhd, 'height_quality')
