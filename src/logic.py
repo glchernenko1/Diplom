@@ -9,6 +9,7 @@ def create_video(url, quality):
     fps = download.download_df(quality)
     print(model_name)
     test.test_model('models/' + model_name[0])
-    process_call_str = 'ffmpeg -i'
+    process_call_str = 'ffmpeg -r "{0}" -f image2 -i results/img%7d.png -y -an  -movflags faststart output.mp4'.format(str(fps))
+    subprocess.getstatusoutput(process_call_str)
 
-create_video('https://www.youtube.com/watch?v=fB-LPJDFDl8', '360p')
+create_video('https://www.youtube.com/watch?v=fB-LPJDFDl8', '480p')
