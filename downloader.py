@@ -7,10 +7,16 @@ from threading import Thread
 class Downloader(object):
     def __init__(self, url):
         self.url = url
-        self.fhd = 137
-        self.hd = 22
-        self.sd = 18
-        self.p240 = 133
+        tmp = YouTube('https://www.youtube.com/watch?v=vAbN2dIdOvE').streams
+        list_res = ['1080p', '720p', '480p', '360p', '240p', '144p']
+        self.youtube_res = dict(zip(list_res, [tmp.filter(res=item).first() for item in list_res]))
+
+    def get_list_resolution(self):
+        list_res = []
+        for key in self.youtube_res.keys():
+            if self.youtube_res.get(key) is not None:
+                list_res.append(key)
+        return list_res
 
     def download_audio(self):
         # m_url = YouTube(url).streams.get_by_itag(fhd).url
@@ -25,17 +31,17 @@ class Downloader(object):
         pass  # Todo сделать нормальное скачивание звука
 
     def df_test(self, n, quality, path):
-        m_url = YouTube(self.url).streams.get_by_itag(quality).url
-        process_call_str = 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%07d.png -y'.format(str(m_url), str(n), str(path))
-        #subprocess.getstatusoutput(process_call_str)
+        process_call_str = 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%07d.png -y'.format(
+            str(self.youtube_res[quality].url), str(n), str(path))
         Thread(target=subprocess.getstatusoutput, args=(process_call_str,)).start()
 
-    def download_df(self, quality, path):
-        tmp = str(YouTube(self.url).streams.get_by_itag(quality))
+    def download_df(self, quality, path='low_quality'):
+        tmp = str(self.youtube_res[quality])
         fps = tmp[tmp.find('fps=') + 5:tmp.find('fps=') + 7]
-        m_url = YouTube(self.url).streams.get_by_itag(quality).url
-        process_call_str = 'ffmpeg -i "{0}" -vf fps="{1}" "{2}"/img%07d.png -y'.format(str(m_url), fps, str(path))
+        process_call_str = 'ffmpeg -i "{0}" -vf fps="{1}" "{2}"/img%07d.png -y'.format(
+            str(self.youtube_res[quality].url), fps, str(path))
         subprocess.getstatusoutput(process_call_str)
+        return fps
 
     def prepared_path(self, path):
         if not os.path.isdir(path):
@@ -45,28 +51,9 @@ class Downloader(object):
             for f in files:
                 os.remove(path + '/' + f)
 
-    def df_tests(self, n, low_quality=133, height_quality=137):
+    def df_tests(self, n, low_quality='240p', height_quality='720p'):
         low_path, height_path = 'low_quality', 'height_quality'
         self.prepared_path(low_path)
         self.prepared_path(height_path)
-        tmp1 = Downloader(self.url)
-        tmp2 = Downloader(self.url)
-        tmp1.df_test(n, low_quality, low_path)
-        tmp2.df_test(n, height_quality, height_path)
-
-
-#
-# video.download_df(video.sd, 'low_quality')
-#video.prepared_path('low_quality')
-# df_test('https://www.youtube.com/watch?v=MtTvKW4CpnI', 12,  sd, 'low_quality')
-# df('https://www.youtube.com/watch?v=MtTvKW4CpnI',  sd, 'low_quality')
-# prepared_path('low_quality')
-# prepared_path('low_quality')
-# ss = "00:01:00"
-# t = "00:01:00.01"
-#print(YouTube('https://www.youtube.com/watch?v=vAbN2dIdOvE').streams)
-video = Downloader('https://www.youtube.com/watch?v=vAbN2dIdOvE')
-#
-video.df_tests(15)
-#video.df_test(15, video.p240, 'height_quality')
-#Downloader(video.url).df_test(15, video.fhd, 'height_quality')
+        self.df_test(n, low_quality, low_path)
+        self.df_test(n, height_quality, height_path)

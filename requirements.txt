@@ -2,3 +2,5 @@ lxml==4.6.1
 flask==1.1.2
 flask_compress==1.8.0
 git+https://github.com/nficano/pytube
+pyopencl
+Pillow

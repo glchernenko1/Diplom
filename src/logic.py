@@ -1,8 +1,14 @@
-from downloader import Downloader
-import metrics
+import test_model
 import test
-url = 'https://www.youtube.com/watch?v=vAbN2dIdOvE' #todo получаем откудато url
-download = Downloader(url)
-download.df_tests(10)
-test.test_model()
-print(metrics.compare('results', 'height_quality'))
+from downloader import Downloader
+import subprocess
+
+def create_video(url, quality):
+    model_name = test_model.best_model(url, quality)
+    download = Downloader(url)
+    fps = download.download_df(quality)
+    print(model_name)
+    test.test_model('models/' + model_name[0])
+    process_call_str = 'ffmpeg -i'
+
+create_video('https://www.youtube.com/watch?v=fB-LPJDFDl8', '360p')
