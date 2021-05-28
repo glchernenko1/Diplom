@@ -7,9 +7,11 @@ from threading import Thread
 class Downloader(object):
     def __init__(self, url):
         self.url = url
-        tmp = YouTube('https://www.youtube.com/watch?v=vAbN2dIdOvE').streams
+        tmp = YouTube(url).streams
         list_res = ['1080p', '720p', '480p', '360p', '240p', '144p']
         self.youtube_res = dict(zip(list_res, [tmp.filter(res=item).first() for item in list_res]))
+        self.len = YouTube(url).length
+
 
     def get_list_resolution(self):
         list_res = []
@@ -18,17 +20,21 @@ class Downloader(object):
                 list_res.append(key)
         return list_res
 
-    def download_audio(self):
-        # m_url = YouTube(url).streams.get_by_itag(fhd).url
-        # process_call_str = 'ffmpeg -i "{0}" -vn -acodec copy output-audio.aac'.format(str(m_url))
-        # subprocess.getstatusoutput(process_call_str)
-        # process_call_str = 'ffmpeg -ss {1} -to {2} -i "{0}"' \
-        #                    ' -acodec aac -b:a 192k -avoid_negative_ts make_zero "{3}" -y' \
-        #     .format(str(m_url), str(start), str(end), os.getcwd() + "/ds1a1.mp4")
-        # status = subprocess.getstatusoutput(process_call_str)[1]
-        # index = status.find('Duration')
-        # return status[index + 10: index + 21]
-        pass  # Todo сделать нормальное скачивание звука
+    def get_fps(self):
+        tmp = str(self.youtube_res[self.get_list_resolution()[0]])
+        return int(tmp[tmp.find('fps=') + 5:tmp.find('fps=') + 7])
+
+    # def download_audio(self):
+    #     # m_url = YouTube(url).streams.get_by_itag(fhd).url
+    #     # process_call_str = 'ffmpeg -i "{0}" -vn -acodec copy output-audio.aac'.format(str(m_url))
+    #     # subprocess.getstatusoutput(process_call_str)
+    #     # process_call_str = 'ffmpeg -ss {1} -to {2} -i "{0}"' \
+    #     #                    ' -acodec aac -b:a 192k -avoid_negative_ts make_zero "{3}" -y' \
+    #     #     .format(str(m_url), str(start), str(end), os.getcwd() + "/ds1a1.mp4")
+    #     # status = subprocess.getstatusoutput(process_call_str)[1]
+    #     # index = status.find('Duration')
+    #     # return status[index + 10: index + 21]
+    #     pass  # Todo сделать нормальное скачивание звука
 
     def df_test(self, n, quality, path):
         process_call_str = 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%07d.png -y'.format(
@@ -43,7 +49,8 @@ class Downloader(object):
         subprocess.getstatusoutput(process_call_str)
         return fps
 
-    def prepared_path(self, path):
+    @staticmethod
+    def prepared_path(path):
         if not os.path.isdir(path):
             os.mkdir(path)
         else:
@@ -57,3 +64,4 @@ class Downloader(object):
         self.prepared_path(height_path)
         self.df_test(n, low_quality, low_path)
         self.df_test(n, height_quality, height_path)
+

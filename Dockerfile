@@ -7,6 +7,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 # todo написать установку cuda
 COPY src /src
-COPY downloader.py /
+COPY src/downloader.py /
 
 WORKDIR /

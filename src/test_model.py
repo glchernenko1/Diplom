@@ -1,5 +1,5 @@
-from downloader import Downloader
-import metrics
+from src.downloader import Downloader
+import src.metrics as metrics
 from PIL import Image
 import test
 import os
