@@ -1,11 +1,19 @@
-version: "3.9"
+version: "3.0"
 services:
   app:
-    image: bitnami/pytorch:latest
+    image:  nvidia/cuda:10.2-base
     build:
       context: .
+   # runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu, utility ]
     ports:
       - 5000:5000
     environment:
       - FLASK_ENV=development
-    command: python run.py
+    command: nvidia-smi #python run.py

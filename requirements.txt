@@ -4,5 +4,8 @@ flask_compress==1.8.0
 git+https://github.com/nficano/pytube
 Pillow
 SSIM-PIL
-opencv-python
+opencv-contrib-python-headless
+torch
+torchvision
+torchaudio
 
