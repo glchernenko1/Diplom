@@ -1,4 +1,4 @@
-from . import video_optimization
+import src.video_optimization as video_optimization
 from flask import Response, request
 import os
 
@@ -18,8 +18,8 @@ def _rewind(range_header, size, length):
 
 
 def processing(): # file_path: str, file_name: str
-    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    file = open(os.path.join(THIS_FOLDER, 'out_video/output.mp4'), 'rb')
+
+    file = open(os.path.join('out_video/output.mp4'), 'rb')
     file = video_optimization.processing(file)
     size = file.seek(0, 2)
     length = size

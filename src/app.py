@@ -1,6 +1,6 @@
-from .config import app_config
+from src.config import app_config
 
-from .view import api as api_blueprint
+from src.view import api as api_blueprint
 
 from flask import Flask, Response, json
 

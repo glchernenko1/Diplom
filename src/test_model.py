@@ -1,9 +1,8 @@
 from src.downloader import Downloader
 import src.metrics as metrics
 from PIL import Image
-import test
+import src.test as test
 import os
-
 
 def resize_data_frame():
     height_quality_size = Image.open('height_quality/img0000001.png').size

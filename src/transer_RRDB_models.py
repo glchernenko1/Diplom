@@ -2,8 +2,8 @@ import os
 import torch
 import RRDBNet_arch as arch
 
-pretrained_net = torch.load('./models/ESRGAN_SRx4_DF2KOST.pth')
-save_path = './models/ESRGAN_SRx4_DF2KOST.pth'
+pretrained_net = torch.load('models/ESRGAN_SRx4_DF2KOST.pth')
+save_path = 'models/ESRGAN_SRx4_DF2KOST.pth'
 
 crt_model = arch.RRDBNet(3, 3, 64, 23, gc=32)
 crt_net = crt_model.state_dict()

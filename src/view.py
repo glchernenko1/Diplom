@@ -1,8 +1,8 @@
 import logging
-from . import video_feed
+import src.video_feed as video_feed
 from flask import Response, Blueprint, request, json, render_template
 from src.downloader import Downloader
-import src.logic
+import src.logic as logic
 from threading import Thread
 import os
 
@@ -32,7 +32,7 @@ def video_resolution():
 @api.route('/progress_bar')
 def progress_bar():
     try:
-        return json.dumps({"success": "true", "data": src.logic.progress_bar()})
+        return json.dumps({"success": "true", "data": logic.progress_bar()})
     except Exception as e:
         log.exception(e)
         return json.dumps({"success": "false", "message": "????"})
@@ -48,7 +48,7 @@ def create_video():
         quality_out = request.form['quality_out']
         Downloader.prepared_path('low_quality')
         Downloader.prepared_path('results')
-        Thread(target=src.logic.create_video, args=(url, quality_download, quality_out, )).start()
+        Thread(target=logic.create_video, args=(url, quality_download, quality_out, )).start()
         return json.dumps({"success": "true"})
     except Exception as e:
         log.exception(e)
