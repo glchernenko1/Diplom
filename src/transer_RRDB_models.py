@@ -1,11 +1,10 @@
-import os
 import torch
 import RRDBNet_arch as arch
 
 
-def add_model(path_in, path_out):
-    pretrained_net = torch.load(path_in)
-    save_path = path_out
+def add_model(name, path_in):
+    pretrained_net = torch.load(path_in + '/' + name)
+    save_path = 'models/' + name
 
     crt_model = arch.RRDBNet(3, 3, 64, 23, gc=32)
     crt_net = crt_model.state_dict()
