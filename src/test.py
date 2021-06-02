@@ -7,8 +7,8 @@ import src.RRDBNet_arch as arch
 
 def test_model(model_path="models/4x_Spongebob_v6.pth"):
       # models/RRDB_ESRGAN_x4.pth OR models/RRDB_PSNR_x4.pth
-    #device = torch.device('cuda')  # if you want to run on CPU, change 'cuda' -> cpu
-    device = torch.device('cpu')
+    device = torch.device('cuda')  # if you want to run on CPU, change 'cuda' -> cpu
+    #device = torch.device('cpu')
 
     test_img_folder = 'low_quality/*'
 
