@@ -12,7 +12,6 @@ class Downloader(object):
         self.youtube_res = dict(zip(list_res, [tmp.filter(res=item).first() for item in list_res]))
         self.len = YouTube(url).length
 
-
     def get_list_resolution(self):
         list_res = []
         for key in self.youtube_res.keys():
@@ -37,14 +36,15 @@ class Downloader(object):
     #     pass  # Todo сделать нормальное скачивание звука
 
     def df_test(self, n, quality, path):
-        process_call_str = 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%07d.png -y'.format(
-            str(self.youtube_res[quality].url), str(n), str(path))
-        Thread(target=subprocess.getstatusoutput, args=(process_call_str,)).start()
+        return 'ffmpeg -i "{0}" -vf fps=1/"{1}" "{2}"/img%07d.png -y'\
+            .format(str(self.youtube_res[quality].url), str(n), str(path))
 
     def download_df(self, quality, path='low_quality'):
         tmp = str(self.youtube_res[quality])
         fps = tmp[tmp.find('fps=') + 5:tmp.find('fps=') + 7]
-        process_call_str = 'ffmpeg -i "{0}" -vf fps="{1}" "{2}"/img%07d.png -y'.format(
+        process_call_str = \
+            'ffmpeg -i "{0}" -vf fps="{1}" ' \
+            '"{2}"/img%07d.png -y'.format(
             str(self.youtube_res[quality].url), fps, str(path))
         subprocess.getstatusoutput(process_call_str)
         return fps
@@ -62,6 +62,7 @@ class Downloader(object):
         low_path, height_path = 'low_quality', 'height_quality'
         self.prepared_path(low_path)
         self.prepared_path(height_path)
-        self.df_test(n, low_quality, low_path)
-        self.df_test(n, height_quality, height_path)
+        Thread(target=subprocess.getstatusoutput,
+               args=(self.df_test(n, low_quality, low_path),)).start()
+        subprocess.getstatusoutput(self.df_test(n, height_quality, height_path))
 
