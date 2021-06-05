@@ -25,8 +25,8 @@ def best_model(url, low_quality):
     download = Downloader(url)
     download.df_tests(10, height_quality=download.get_list_resolution()[0], low_quality=low_quality)
     reslt= {}
-    files = os.listdir('models')
-    for f in files:
+    models = os.listdir('models')
+    for f in models:
         print(f)
         test.test_model('models/'+f)
         resize_data_frame()
