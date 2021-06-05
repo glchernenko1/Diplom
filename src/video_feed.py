@@ -17,8 +17,7 @@ def _rewind(range_header, size, length):
     return byte1, length
 
 
-def processing(): # file_path: str, file_name: str
-
+def processing():
     file = open(os.path.join('out_video/output.mp4'), 'rb')
     file = video_optimization.processing(file)
     size = file.seek(0, 2)

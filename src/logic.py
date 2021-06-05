@@ -16,10 +16,10 @@ def progress_bar():
         return 0
     return int(res_count / low_count * 100)
 
+
 def build_video(fps, quality_out):
     process_call_str = 'ffmpeg -r "{0}" -f image2 -i results/img%7d.png -y -an -s "{1}"' \
-                       ' -movflags faststart out_video/output.mp4'.format(
-        str(fps), quality_out)
+                       ' -movflags faststart out_video/output.mp4'.format(str(fps), quality_out)
     subprocess.getstatusoutput(process_call_str)
 
 def create_video(url, quality_download, quality_out):
