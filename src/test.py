@@ -5,11 +5,9 @@ import numpy as np
 import torch
 import src.RRDBNet_arch as arch
 
-def test_model(model_path="models/4x_Spongebob_v6.pth"):
 
-    device = torch.device('cuda')
-    #device = torch.device('cpu')
-
+def test_model(model_path):
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     test_img_folder = 'low_quality/*'
 
     model = arch.RRDBNet(3, 3, 64, 23, gc=32)
