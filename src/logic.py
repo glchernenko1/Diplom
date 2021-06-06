@@ -6,6 +6,19 @@ import glob
 
 is_test = True
 
+list_res = ['1080p', '720p', '480p', '360p', '240p', '144p']
+
+def video_resolution_out(resolution):
+    if resolution == '144p':
+        return list_res[2:4]
+    if resolution == '240p':
+        return list_res[1:3]
+    if resolution == '360p':
+        return list_res[:2]
+    if resolution == '480p':
+        return list_res[:1]
+    if resolution == '720p' or resolution == '1080p':
+        return list_res[0]
 
 def progress_bar():
     if is_test:
