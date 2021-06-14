@@ -27,7 +27,7 @@
           </select>
           <div class="form-text">Введите качество для улучшения видео</div>
         </div>
-        <button v-on:click="buttonSubmit()" type="button" class="btn btn-primary">{{ buttonText }}</button>
+        <button v-on:click="buttonSubmit()" type="button" class="btn" v-bind:disabled="isButtonDisabled" v-bind:class="{'btn-danger': isButtonDisabled, 'btn-primary' : !isButtonDisabled}">Старт</button>
       </form>
     </div>
   </div>
@@ -40,7 +40,6 @@ export default {
   name: 'Form',
   data() {
     return {
-      buttonText:          'Проверить качество',
       url:                 '',
       selectOriginalValue: '-',
       selectOriginal:      [
@@ -54,8 +53,9 @@ export default {
       isUrlError:               false,
       isSelectOriginalDisabled: true,
       isSelectFinalDisabled:    true,
+      isButtonDisabled:           true,
 
-      progressValue: '100'
+      progressValue: '0'
     }
   },
   methods: {
@@ -68,7 +68,6 @@ export default {
             .then(response => {
               this.selectOriginal           = response.data.data;
               this.isSelectOriginalDisabled = false;
-              this.buttonText               = 'Улучшить видео';
             })
             .catch(error => {
               console.log(error);
@@ -83,7 +82,7 @@ export default {
           .then(response => {
             this.selectFinal           = response.data.data;
             this.isSelectFinalDisabled = false;
-            this.buttonText            = 'Улучшить видео';
+            this.isButtonDisabled        = false;
           })
           .catch(error => {
             console.log(error);
@@ -99,7 +98,6 @@ export default {
           .then(response => {
             this.selectOriginal           = response.data.data;
             this.isSelectOriginalDisabled = false;
-            this.buttonText               = 'Улучшить видео';
           })
           .catch(error => {
             console.log(error);
