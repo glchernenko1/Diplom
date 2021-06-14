@@ -27,7 +27,7 @@ def video_feed_endpoint():
 def video_resolution_out():
     try:
         return json.dumps(
-            {"success": "true", "data": json.dumps(logic.video_resolution_out(request.form['resolution']))})
+            {"success": "true", "data": json.dumps(logic.video_resolution_out(request.get_json(force=True)['resolution']))})
     except Exception as e:
         log.exception(e)
         return json.dumps({"success": "false", "message": "url не найден"})
@@ -37,7 +37,7 @@ def video_resolution_out():
 def video_resolution():
     try:
         return json.dumps(
-            {"success": "true", "data": json.dumps(Downloader(request.form['url']).get_list_resolution())})
+            {"success": "true", "data": json.dumps(Downloader(request.get_json(force=True)['url']).get_list_resolution())})
     except Exception as e:
         log.exception(e)
         return json.dumps({"success": "false", "message": "url не найден"})
@@ -57,9 +57,9 @@ def create_video():
     try:
         if os.path.exists('out_video/output.mp4'):
             os.remove('out_video/output.mp4')
-        url = request.form['url']
-        quality_download = request.form['quality_download']
-        quality_out = video_resolution_out_dict[request.form['quality_out']]
+        url = request.get_json(force=True)['url']
+        quality_download = request.get_json(force=True)['quality_download']
+        quality_out = video_resolution_out_dict[request.get_json(force=True)['quality_out']]
         Downloader.prepared_path('low_quality')
         Downloader.prepared_path('results')
         Thread(target=logic.create_video, args=(url, quality_download, quality_out,)).start()
